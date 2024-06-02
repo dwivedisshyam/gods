@@ -1,1 +1,1 @@
-# DS-With-Go
+# Data Structure with Golang
