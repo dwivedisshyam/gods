@@ -1,3 +1,3 @@
-package singlylinkedlist
+package lists
 
 // TODO: add unit tests

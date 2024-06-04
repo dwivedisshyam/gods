@@ -1,20 +1,26 @@
-package singlylinkedlist
+package lists
 
 import "fmt"
 
 // ---------------------------------- LinkedList ----------------------------------
 
-type List[T comparable] struct {
-	Head *Node[T]
+type SinglyLinkedList[T comparable] struct {
+	Head   *SinglyNode[T]
+	length int
 }
 
-func New[T comparable]() *List[T] {
-	return &List[T]{
-		Head: nil,
+func NewSinglyLinkedList[T comparable]() *SinglyLinkedList[T] {
+	return &SinglyLinkedList[T]{
+		Head:   nil,
+		length: 0,
 	}
 }
 
-func (ll *List[T]) SearchNode(data T) *Node[T] {
+func (ll *SinglyLinkedList[T]) Length() int {
+	return ll.length
+}
+
+func (ll *SinglyLinkedList[T]) SearchNode(data T) *SinglyNode[T] {
 	if ll.Head == nil {
 		return nil
 	}
@@ -31,7 +37,7 @@ func (ll *List[T]) SearchNode(data T) *Node[T] {
 	return nil
 }
 
-func (ll *List[T]) DeleteNode(data T) {
+func (ll *SinglyLinkedList[T]) DeleteNode(data T) {
 	if ll.Head == nil {
 		return
 	}
@@ -46,7 +52,7 @@ func (ll *List[T]) DeleteNode(data T) {
 		return
 	}
 
-	var prev *Node[T] = nil
+	var prev *SinglyNode[T] = nil
 	for temp != nil {
 		if temp.Data == data && temp.Next != nil {
 			temp.Data = temp.Next.Data
@@ -61,14 +67,18 @@ func (ll *List[T]) DeleteNode(data T) {
 	}
 }
 
-func (ll *List[T]) AddNodes(data ...T) {
+func (ll *SinglyLinkedList[T]) AddNodes(data ...T) {
 	for _, d := range data {
 		ll.AddNode(d)
 	}
 }
 
-func (ll *List[T]) AddNode(data T) {
-	node := NewNode(data)
+func (ll *SinglyLinkedList[T]) AddNode(data T) {
+	defer func() {
+		ll.length++
+	}()
+
+	node := NewSinglyNode(data)
 
 	if ll.Head == nil {
 		ll.Head = node
@@ -84,7 +94,7 @@ func (ll *List[T]) AddNode(data T) {
 	temp.Next = node
 }
 
-func (ll *List[T]) Print() {
+func (ll *SinglyLinkedList[T]) Print() {
 	if ll.Head == nil {
 		return
 	}
@@ -100,13 +110,13 @@ func (ll *List[T]) Print() {
 
 // ---------------------------------- Node ----------------------------------
 
-type Node[T comparable] struct {
+type SinglyNode[T comparable] struct {
 	Data T
-	Next *Node[T]
+	Next *SinglyNode[T]
 }
 
-func NewNode[T comparable](data T) *Node[T] {
-	return &Node[T]{
+func NewSinglyNode[T comparable](data T) *SinglyNode[T] {
+	return &SinglyNode[T]{
 		Data: data,
 		Next: nil,
 	}
