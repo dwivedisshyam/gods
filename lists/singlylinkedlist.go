@@ -1,23 +1,20 @@
 package lists
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 // ---------------------------------- LinkedList ----------------------------------
 
-type SinglyLinkedList[T comparable] struct {
-	Head   *SinglyNode[T]
-	length int
+type SinglyLinkedList[T any] struct {
+	Head *SinglyNode[T]
 }
 
-func NewSinglyLinkedList[T comparable]() *SinglyLinkedList[T] {
+func NewSinglyLinkedList[T any]() *SinglyLinkedList[T] {
 	return &SinglyLinkedList[T]{
-		Head:   nil,
-		length: 0,
+		Head: nil,
 	}
-}
-
-func (ll *SinglyLinkedList[T]) Length() int {
-	return ll.length
 }
 
 func (ll *SinglyLinkedList[T]) SearchNode(data T) *SinglyNode[T] {
@@ -28,7 +25,7 @@ func (ll *SinglyLinkedList[T]) SearchNode(data T) *SinglyNode[T] {
 	var temp = ll.Head
 
 	for temp != nil {
-		if temp.Data == data {
+		if reflect.DeepEqual(temp.Data, data) {
 			return temp
 		}
 
@@ -44,21 +41,21 @@ func (ll *SinglyLinkedList[T]) DeleteNode(data T) {
 
 	var temp = ll.Head
 
-	if temp.Data == data && temp.Next != nil {
+	if reflect.DeepEqual(temp.Data, data) && temp.Next != nil {
 		ll.Head = ll.Head.Next
 		return
-	} else if temp.Data == data {
+	} else if reflect.DeepEqual(temp.Data, data) {
 		temp = nil
 		return
 	}
 
 	var prev *SinglyNode[T] = nil
 	for temp != nil {
-		if temp.Data == data && temp.Next != nil {
+		if reflect.DeepEqual(temp.Data, data) && temp.Next != nil {
 			temp.Data = temp.Next.Data
 			temp.Next = temp.Next.Next
 			return
-		} else if temp.Data == data && temp.Next == nil {
+		} else if reflect.DeepEqual(temp.Data, data) && temp.Next == nil {
 			prev.Next = nil
 			return
 		}
@@ -74,10 +71,6 @@ func (ll *SinglyLinkedList[T]) AddNodes(data ...T) {
 }
 
 func (ll *SinglyLinkedList[T]) AddNode(data T) {
-	defer func() {
-		ll.length++
-	}()
-
 	node := NewSinglyNode(data)
 
 	if ll.Head == nil {
@@ -110,12 +103,12 @@ func (ll *SinglyLinkedList[T]) Print() {
 
 // ---------------------------------- Node ----------------------------------
 
-type SinglyNode[T comparable] struct {
+type SinglyNode[T any] struct {
 	Data T
 	Next *SinglyNode[T]
 }
 
-func NewSinglyNode[T comparable](data T) *SinglyNode[T] {
+func NewSinglyNode[T any](data T) *SinglyNode[T] {
 	return &SinglyNode[T]{
 		Data: data,
 		Next: nil,
