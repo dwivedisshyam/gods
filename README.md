@@ -5,6 +5,7 @@
 - Doubly Linked List
 
 ## Stack
+- GenericStack
 
 ## Queue
 
